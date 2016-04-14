@@ -9,3 +9,8 @@ __Legenda dos ficheiros de dados (só podem ser importados com MATLAB): zA_xBC.m
 * A -> coordenada de z
 * B -> ponto inicial do sweep
 * C -> ponto final do sweep
+
+- - - -
+
+__Segue uma foto de um gato a comer couve__
+![picture alt](https://i.ytimg.com/vi/wZIaj0FDIuI/hqdefault.jpg "Gato a comer couve")
