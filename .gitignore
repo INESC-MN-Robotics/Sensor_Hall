@@ -1,0 +1,8 @@
+*.log
+*.pdf
+*.gif
+*.jpg
+
+!docs/MLX90393_datasheet.pdf
+!docs/MLX90393_getstarted.pdf
+!docs/git-cheat-sheet.pdf
