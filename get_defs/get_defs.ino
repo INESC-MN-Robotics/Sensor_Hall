@@ -11,13 +11,6 @@
   byte byte1=0, byte2=0, byte3=0;
   unsigned int st;
 
-  union field{
-    int valor;
-    byte a[2];
-  };
-
-  field x, y, z;
-
 void setup() {
   pinMode(4,INPUT);
   Wire.begin(); // join i2c bus (address optional for master)
@@ -29,11 +22,11 @@ void loop() {
   // device address is specified in datasheet
         
   Wire.write(byte(0x50));            //[0101 0000] sends instruction byte (consultar memória)
-  Wire.write(byte(0x04));            //[0000 0100] morada 0x02
+  Wire.write(byte3);                 //[0000 0100] morada 0x02
   ack=Wire.endTransmission();
 
-  Serial.print("A ler morada ");
-  Serial.println(byte3,HEX);
+  Serial.print("A ler morada 0x");
+  Serial.println(byte3 >> 2,HEX);
   Serial.println();
   
   Serial.println(ack);
@@ -62,13 +55,13 @@ void loop() {
     str2.toCharArray(char2, 5);
     byte2=strtoul(char2,NULL,16);
     st=2;
-    Serial.println("Introduzir MORADA");
-    Serial.println("Da forma: (<MORADA (6bits)> 0 0)");
+    Serial.println("Introduzir MORADA em hexadecimal");
     while(!Serial.available()&&st==2);
     str3=Serial.readString();
     str3.toCharArray(char3, 5);
     byte3=strtoul(char3,NULL,16);
-    if(char3[0]=='p' || char2[0]=='p'){
+    byte3=byte3 << 2;
+    if(char3[0]!='p' && char2[0]!='p'){
       Wire.beginTransmission(0xc);
       Wire.write(0x60); //Instruction - write
       Wire.write(byte1); 
@@ -82,10 +75,10 @@ void loop() {
       Serial.println("Dados enviados \n");
     }
     else
-      Serial.println("Não foi enviada instrução \n");
+      Serial.println("Nao foi enviada instrucao \n");
   }
   else
-    Serial.println("Pronto para receber instrução");
+    Serial.println("Pronto para receber instrucao");
 delay(2000);  
 
 }
