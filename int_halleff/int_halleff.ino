@@ -53,7 +53,7 @@ void loop() {
       ack=Wire.endTransmission();
     
       Serial.print("A ler morada 0x");
-      Serial.println(byte3 ,HEX);
+      Serial.println(byte3>>2 ,HEX);
       Serial.println();
       
       Serial.println(ack);
@@ -78,6 +78,50 @@ void loop() {
           swt=1;
           Serial.println("A SAIR DO MODO DE CONFIGURACAO");
           delay(1500); 
+          break;
+        }
+        else if (char1[0]=='g'){
+          Serial.println("BURNING EEPROM");
+          Serial.println("(REGISTER WON'T BE RESTORED AFTER HARD RESET!!!)");
+          delay(5000);
+          Serial.println("SENDING");
+          delay(1000);
+          Wire.beginTransmission(0xc);
+          Wire.write(0xe0); //Instruction - write
+          ack=Wire.endTransmission();
+          Wire.requestFrom(0xc, 1);
+          stat=Wire.read();
+          Serial.println(ack);
+          Serial.println(stat);
+          Serial.println("\n");
+          Serial.println("Stored! \n");
+          delay(1500);
+          break;
+        }
+        else if (char1[0]=='r'){
+          Serial.println("Restoring...");
+          delay(1000);
+          Wire.beginTransmission(0xc);
+          Wire.write(0xd0);
+          ack=Wire.endTransmission();
+          Wire.requestFrom(0xc,1);
+          stat=Wire.read();
+          Serial.println(ack);
+          Serial.println(stat);
+          Serial.println("\n");
+          Serial.println("Restored! \n");
+          delay(1500);
+          break;
+        }
+        else if (char1[0]=='p'){
+          Serial.println("Introduzir MORADA em hexadecimal");
+          while(!Serial.available()&&st==1);
+          str3=Serial.readString();
+          str3.toCharArray(char3, 5);
+          byte3=strtoul(char3,NULL,16);
+          byte3=byte3 << 2;
+          Serial.println("Nao foi enviada instrucao \n");
+          delay(1500);
           break;
         }
         Serial.println("Introduzir byte 2");
@@ -111,6 +155,7 @@ void loop() {
       else
         Serial.println("Pronto para receber instrucao");
         Serial.println("(s para sair deste modo)");
+        Serial.println("(p para somente ler morada)");
       delay(2000);
     break;
 
@@ -126,7 +171,7 @@ void loop() {
       //while(digitalRead(4)==LOW);
       //atime=millis();
       //rtime=atime-ptime;
-      delay(10);
+      delay(40);
         
       Wire.requestFrom(0xc, 1);    // request 1 byte from slave device #0xc (status)
       //Serial.print("\n");

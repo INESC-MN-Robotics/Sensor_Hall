@@ -1,9 +1,11 @@
 %clc;
 %clear all;
 close all;
+delete(instrfindall);
+
 %a=arduino('com12','leonardo');
 a=[];
-comport=serial('COM8', 'Baudrate', 9600); 
+comport=serial('COM10', 'Baudrate', 9600); 
 fopen(comport); 
 x=int16.empty(1000,0);
 y=int16.empty(100,0);
@@ -41,14 +43,18 @@ while(t<500)
     %hold on;
     %plot(((0.161*cast(x,'double').^2+(0.322*cast(y,'double')).^2+(2.349*cast(z,'double')).^2)).^(0.5),'b-');
     %a=[a;t*0.05];
-    plot(cast(z+900,'double'),'b-');
+    clf;
+    plot(0.01*(cast(z,'double')*0.294-0.26),'b-');
     hold on;
     grid on;
-    plot(cast(y+750,'double'),'r-');
-    plot(cast(x-1600,'double'),'g-');
+    plot(0.01*(cast(y,'double')*0.161+0.05),'r-');
+    plot(0.01*(cast(x,'double')*0.161-0.01),'g-');
     xlabel('iter');
-    ylabel('ADC VALUE');
+    ylabel('Oe');
+    %legend('z','y','x');
+    
     pause(0.001);
     hold off;
 end
+legend('z','y','x');
 fclose(comport);
