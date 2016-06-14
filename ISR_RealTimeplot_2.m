@@ -5,7 +5,7 @@ delete(instrfindall);
 
 %a=arduino('com12','leonardo');
 a=[];
-comport=serial('COM10', 'Baudrate', 9600); 
+comport=serial('COM8', 'Baudrate', 9600); 
 fopen(comport); 
 x=int16.empty(1000,0);
 y=int16.empty(100,0);
@@ -21,7 +21,7 @@ if (g==50)
     return;
 end
 
-while(t<500)
+while(1)
     t=t+1;
     if t~=1
         fscanf(comport,'%d');
@@ -44,15 +44,25 @@ while(t<500)
     %plot(((0.161*cast(x,'double').^2+(0.322*cast(y,'double')).^2+(2.349*cast(z,'double')).^2)).^(0.5),'b-');
     %a=[a;t*0.05];
     clf;
-    plot(0.01*(cast(z,'double')*0.294-0.26),'b-');
-    hold on;
-    grid on;
-    plot(0.01*(cast(y,'double')*0.161+0.05),'r-');
-    plot(0.01*(cast(x,'double')*0.161-0.01),'g-');
-    xlabel('iter');
-    ylabel('Oe');
-    %legend('z','y','x');
-    
+    if(t<=200)
+        plot((cast(z,'double')*0.294*0.01),'b-');
+        hold on;
+        grid on;
+        plot((cast(y,'double')*0.161*0.01),'r-');
+        plot((cast(x,'double')*0.161*0.01),'g-');
+        xlabel('iter');
+        ylabel('Oe');
+        axis([0 200 -inf inf]);
+    else
+        plot((cast(z(t-200:t),'double')*0.294*0.01),'b-');
+        hold on;
+        grid on;
+        plot((cast(y(t-200:t),'double')*0.161*0.01),'r-');
+        plot((cast(x(t-200:t),'double')*0.161*0.01),'g-');
+        xlabel('iter');
+        ylabel('Oe');
+        axis([0 200 -inf inf]);
+    end
     pause(0.001);
     hold off;
 end
