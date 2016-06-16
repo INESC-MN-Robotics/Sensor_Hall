@@ -45,7 +45,7 @@ void loop() {
   switch (swt){
 
     case 0:
-      Wire.beginTransmission(0xc); // transmit to device #44 (0x2c)
+      Wire.beginTransmission(0x14); // transmit to device #44 (0x2c)
       // device address is specified in datasheet
             
       Wire.write(byte(0x50));            //[0101 0000] sends instruction byte (consultar memória)
