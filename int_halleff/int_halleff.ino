@@ -12,6 +12,7 @@
   String str1, str2, str3;
   byte byte1=0, byte2=0, byte3=0;
   unsigned int st;
+  int address = 0xc;
 
   union field{
     int valor;
@@ -35,6 +36,11 @@ void loop() {
       Serial.println("MODO DE FUNCIONAMENTO: CONFIGURACAO");
       delay(1500);
     }
+    else if(temp_swt==2){
+      swt=temp_swt;
+      Serial.println("MODO DE FUNCIONAMENTO: ADDRESS SEARCH");
+      delay(1500);
+    }
     else{
       Serial.println(temp_swt);
       Serial.println("Introduzir 0 para modo de configuracao");
@@ -45,7 +51,7 @@ void loop() {
   switch (swt){
 
     case 0:
-      Wire.beginTransmission(0x14); // transmit to device #44 (0x2c)
+      Wire.beginTransmission(address); // transmit to device #44 (0x2c)
       // device address is specified in datasheet
             
       Wire.write(byte(0x50));            //[0101 0000] sends instruction byte (consultar memória)
@@ -57,7 +63,7 @@ void loop() {
       Serial.println();
       
       Serial.println(ack);
-      Wire.requestFrom(0xc, 3);    // request 2 bytes from slave device #0xe (status)
+      Wire.requestFrom(address, 3);    // request 2 bytes from slave device #0xe (status)
       
       stat=Wire.read();
       b1=Wire.read();
@@ -86,10 +92,10 @@ void loop() {
           delay(5000);
           Serial.println("SENDING");
           delay(1000);
-          Wire.beginTransmission(0xc);
+          Wire.beginTransmission(address);
           Wire.write(0xe0); //Instruction - write
           ack=Wire.endTransmission();
-          Wire.requestFrom(0xc, 1);
+          Wire.requestFrom(address, 1);
           stat=Wire.read();
           Serial.println(ack);
           Serial.println(stat);
@@ -101,10 +107,10 @@ void loop() {
         else if (char1[0]=='r'){
           Serial.println("Restoring...");
           delay(1000);
-          Wire.beginTransmission(0xc);
+          Wire.beginTransmission(address);
           Wire.write(0xd0);
           ack=Wire.endTransmission();
-          Wire.requestFrom(0xc,1);
+          Wire.requestFrom(address,1);
           stat=Wire.read();
           Serial.println(ack);
           Serial.println(stat);
@@ -137,13 +143,13 @@ void loop() {
         byte3=strtoul(char3,NULL,16);
         byte3=byte3 << 2;
         if(char2[0]!='p'){
-          Wire.beginTransmission(0xc);
+          Wire.beginTransmission(address);
           Wire.write(0x60); //Instruction - write
           Wire.write(byte1); 
           Wire.write(byte2); 
           Wire.write(byte3); 
           ack=Wire.endTransmission();
-          Wire.requestFrom(0xc, 1);
+          Wire.requestFrom(address, 1);
           stat=Wire.read();
           Serial.println(ack);
           Serial.println(stat);
@@ -160,7 +166,7 @@ void loop() {
     break;
 
     case 1:
-      Wire.beginTransmission(0xc); // transmit to device #44 (0x2c)
+      Wire.beginTransmission(address); // transmit to device #44 (0x2c)
       // device address is specified in datasheet
             
       Wire.write(byte(0x3e));            //[0011 1110] sends instruction byte (single read, XYZ sem temperatura)
@@ -173,7 +179,7 @@ void loop() {
       //rtime=atime-ptime;
       delay(40);
         
-      Wire.requestFrom(0xc, 1);    // request 1 byte from slave device #0xc (status)
+      Wire.requestFrom(address, 1);    // request 1 byte from slave device #address (status)
       //Serial.print("\n");
       
       c2=0;
@@ -183,13 +189,13 @@ void loop() {
         c2 = Wire.read();    // lê todos os bytes e guarda num vector
       }
     
-      Wire.beginTransmission(0xc); 
+      Wire.beginTransmission(address); 
     
       Wire.write(byte(0x4e)); //0100 1110 - Ler uma vez campo (zyx)
     
       Wire.endTransmission();
     
-      Wire.requestFrom(0xc, 7);    // request 1 byte from slave device #0xc (status)
+      Wire.requestFrom(address, 7);    // request 1 byte from slave device #address (status)
       //Serial.print("\n");
       
       c2=0;
@@ -217,5 +223,52 @@ void loop() {
       Serial.println(z.valor);
       delay(10);  
       break;
+      
+      case 2:
+          Serial.println("Locating address...");
+            for(i=0x0;i<=0x3F;i=i+0x1){
+              Wire.beginTransmission(i); // transmit to device #44 (0x2c)
+              // device address is specified in datasheet
+              
+              delay(100);              
+              Serial.print("I2C Addr ");
+              Serial.println(i,HEX);
+              Wire.write(byte(0x50));            //[0101 0000] sends instruction byte (consultar memória)
+              Wire.write(byte3);                 //[0000 0100] morada 0x02
+              ack=Wire.endTransmission();
+            
+              Serial.print("A ler morada 0x");
+              Serial.println(byte3>>2 ,HEX);
+              Serial.println();
+              
+              Serial.println(ack);
+              Wire.requestFrom(address, 3);    // request 2 bytes from slave device #0xe (status)
+              
+              stat=Wire.read();
+              b1=Wire.read();
+              b2=Wire.read();
+            
+              Serial.println(stat,BIN);
+              Serial.print(b1,BIN);
+              Serial.print("  ");
+              Serial.print(b2,BIN);
+              Serial.println("\n");
+              
+              if(ack==0){
+                Serial.print("Address Found: 0x");
+                Serial.println(i,HEX);
+                Serial.println("Changing now and leaving to measure mode...");
+                address=i;
+                swt=1;
+                delay(1500);
+                break;
+              }
+        }
+          if(swt!=1){
+          Serial.println("Adress not found! Aborting...");
+          swt=1;
+          break;
         }
   }
+  
+}
