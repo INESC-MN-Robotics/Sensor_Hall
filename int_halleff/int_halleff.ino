@@ -12,7 +12,7 @@
   String str1, str2, str3;
   byte byte1=0, byte2=0, byte3=0;
   unsigned int st;
-  int address = 0xc;
+  int address = 0xe;
 
   union field{
     int valor;
@@ -177,7 +177,7 @@ void loop() {
       //while(digitalRead(4)==LOW);
       //atime=millis();
       //rtime=atime-ptime;
-      delay(40);
+      delay(30);
         
       Wire.requestFrom(address, 1);    // request 1 byte from slave device #address (status)
       //Serial.print("\n");
