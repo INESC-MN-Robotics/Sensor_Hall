@@ -2,6 +2,7 @@
 *.pdf
 *.gif
 *.jpg
+*.png
 
 !docs/MLX90393_datasheet.pdf
 !docs/MLX90393_getstarted.pdf
