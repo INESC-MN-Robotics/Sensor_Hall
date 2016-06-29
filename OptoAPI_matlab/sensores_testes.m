@@ -170,11 +170,11 @@ out(:,2)=x;
 out(:,3)=y;
 out(:,4)=z;
 dlmwrite('sensor_hall_STEP.log',out, ' ');
-out2(:,1)=1:ze;
+out2(:,1)=cast(1:ze,'double');
 out2(:,2)=Fx(1:ze);
 out2(:,3)=Fy(1:ze);
 out2(:,4)=Fz(1:ze);
-dlmwrite('sensor_opto_STEP.log',out2, ' ');
+dlmwrite('sensor_opto_STEP.log',out2, ' ','precision','%.6f');
 %plot(tempo(1:t),z,tempo(1:t),y,tempo(1:t),x,1:ze,1000*Fz(1:ze),1:ze,1000*Fy(1:ze),1:ze,1000*Fx(1:ze))
 
 clear daq;                              % Destroy the OptoDAQ class

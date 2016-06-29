@@ -1,5 +1,5 @@
 %clc;
-%clear all;
+clear;
 close all;
 delete(instrfindall);
 
@@ -67,9 +67,9 @@ while(1)
     hold off;
 end
 legend('z','y','x');
-out(:,1)=t;
-out(:,2)=x(1:length(t));
-out(:,3)=y(1:length(t));
-out(:,4)=z(1:length(t));
+out(:,1)=1:t;
+out(:,2)=x;
+out(:,3)=y;
+out(:,4)=z;
 dlmwrite('mlx30393_zcal.log', out, ' ');
 fclose(comport);
