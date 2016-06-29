@@ -27,7 +27,7 @@ if (g==50)
 end
 t=1;
 d=0;
-while(t<=300)
+while(t<=100)
     t0=tic;
     letra=fscanf(comport,'%s');
     d=d+1;
@@ -197,7 +197,7 @@ while(t<=300)
     %fprintf('aquis: %f   plot: %f\n', t1, t3);
 end
 out=[];
-out(:,1)=1:t-1;
+out(:,1)=cast(1:t-1,'double');
 %X
 out(:,2)=x(1:t-1,1);
 out(:,5)=x(1:t-1,2);
