@@ -1,5 +1,5 @@
-filename='sensor_hall_min2.log';
-filename2='sensor_opto_min2.log';
+filename='sensor_hall_min2_c.log';
+filename2='sensor_opto_min2_c.log';
 
 Hall=dlmread(filename,' ');
 Opto=dlmread(filename2,' ');
@@ -12,7 +12,7 @@ x=dlmread(filename,' ',[0 1 rows-1 1]);
 y=dlmread(filename,' ',[0 2 rows-1 2]);
 z=dlmread(filename,' ',[0 3 rows-1 3]);
 
-t2=dlmread(filename2,' ',[0 0 rows2-1 0]);
+%t2=dlmread(filename2,' ',[0 0 rows2-1 0]);
 x2=dlmread(filename2,' ',[0 1 rows2-1 1]);
 y2=dlmread(filename2,' ',[0 2 rows2-1 2]);
 z2=dlmread(filename2,' ',[0 3 rows2-1 3]);
@@ -77,15 +77,22 @@ z=z*0.294*0.01;
 % xlim([0 3E4])
 % title('Optical sensor')
 
-% xx=0:rows2/rows:rows2-1;
-% 
-% z_opto=spline(t2,z2,xx);
+z=-z;
+%z2=z2-mean(z2(1:5000));
+xx=0:rows2/rows:rows2-1;
+t2=1:1:rows2;
+z_opto=spline(t2,z2,xx);
+z_opto=z_opto';
+f=fit(z_opto,z,'poly1');
 
-%plot(t,z_opto)
-cima=0;
-thresh=0.25;
-ii=0;
-ff=0;
+plot(f,z_opto,z)
+
+
+
+% cima=0;
+% thresh=0.25;
+% ii=0;
+% ff=0;
 % while(ii<315)
 % if(z_opto(ii)>z_opto(ii-1)+0.03)
 %     cima=1;
