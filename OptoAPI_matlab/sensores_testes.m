@@ -57,7 +57,7 @@ if (ports.getLastSize()>0),             % Is there at least 1 available port?
             return;
         end
         
-        while (elapsed_time<300 && output.size>=0 ),        % Loop for 10sec (quit if any error)
+        while (elapsed_time<60 && output.size>=0 ),        % Loop for 10sec (quit if any error)
             
             
             %-----------------------OPTO---------------------------------------
@@ -169,12 +169,12 @@ out(:,1)=tempo;
 out(:,2)=x;
 out(:,3)=y;
 out(:,4)=z;
-dlmwrite('sensor_hall_Y_50.log',out, ' ');
+dlmwrite('sensor_hall_min2_c.log',out, ' ');
 out2(:,1)=cast(1:ze,'double');
 out2(:,2)=Fx(1:ze);
 out2(:,3)=Fy(1:ze);
 out2(:,4)=Fz(1:ze);
-dlmwrite('sensor_opto_Y_50.log',out2, ' ');
+dlmwrite('sensor_opto_min2_c.log',out2, ' ');
 %plot(tempo(1:t),z,tempo(1:t),y,tempo(1:t),x,1:ze,1000*Fz(1:ze),1:ze,1000*Fy(1:ze),1:ze,1000*Fx(1:ze))
 
 clear daq;                              % Destroy the OptoDAQ class

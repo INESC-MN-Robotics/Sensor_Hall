@@ -46,19 +46,19 @@ while(t<1000)
     clf;
     if(t<=200)
         plot((cast(z,'double')*0.294*0.01),'b-');
-        hold on;
-        grid on;
-        plot((cast(y,'double')*0.161*0.01),'r-');
-        plot((cast(x,'double')*0.161*0.01),'g-');
+%         hold on;
+%         grid on;
+%         plot((cast(y,'double')*0.161*0.01),'r-');
+%         plot((cast(x,'double')*0.161*0.01),'g-');
         xlabel('iter');
         ylabel('Oe');
         axis([0 200 -inf inf]);
     else
         plot((cast(z(t-200:t),'double')*0.294*0.01),'b-');
-        hold on;
-        grid on;
-        plot((cast(y(t-200:t),'double')*0.161*0.01),'r-');
-        plot((cast(x(t-200:t),'double')*0.161*0.01),'g-');
+%         hold on;
+%         grid on;
+%         plot((cast(y(t-200:t),'double')*0.161*0.01),'r-');
+%         plot((cast(x(t-200:t),'double')*0.161*0.01),'g-');
         xlabel('iter');
         ylabel('Oe');
         axis([0 200 -inf inf]);
