@@ -5,7 +5,7 @@ delete(instrfindall);
 
 %a=arduino('com12','leonardo');
 a=[];
-comport=serial('COM8', 'Baudrate', 9600); 
+comport=serial('COM11', 'Baudrate', 9600); 
 fopen(comport); 
 x=int16.empty(1000,0);
 y=int16.empty(100,0);
@@ -21,7 +21,7 @@ if (g==50)
     return;
 end
 
-while(1)
+while(t<1000)
     t=t+1;
     if t~=1
         fscanf(comport,'%d');
